@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rental Property ROI Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #001f3f; /* Navy blue background */
+            color: white;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input {
+            background-color: #ffffff; /* White input background */
+            color: #001f3f; /* Navy blue text for inputs */
+        }
+        button {
+            background-color: #001f3f; /* Navy blue button background */
+            color: white; /* White text on buttons */
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #003366; /* Darker navy blue on hover */
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #003366; /* Darker navy blue header for the table */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rental Property ROI Calculator</h1>
+    <form id="roiForm">
+        <label for="purchasePrice">Purchase Price ($):</label>
+        <input type="number" id="purchasePrice" placeholder="Enter purchase price" required>
+
+        <label for="monthlyRentalIncome">Monthly Rental Income ($):</label>
+        <input type="number" id="monthlyRentalIncome" placeholder="Enter rental income" required>
+
+        <label for="monthlyExpenses">Monthly Expenses ($):</label>
+        <input type="number" id="monthlyExpenses" placeholder="Enter expenses (taxes, insurance, etc.)" required>
+
+        <label for="rehabCost">Initial Rehab Costs ($):</label>
+        <input type="number" id="rehabCost" placeholder="Enter rehab costs (if applicable)" required>
+
+        <button type="button" onclick="calculateROI()">Calculate</button>
+    </form>
+
+    <h2 id="cashFlow"></h2>
+    <h2 id="roi"></h2>
+    <h2 id="capRate"></h2>
+    <h2 id="breakEven"></h2>
+
+    <script>
+        function calculateROI() {
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value);
+            const monthlyRentalIncome = parseFloat(document.getElementById('monthlyRentalIncome').value);
+            const monthlyExpenses = parseFloat(document.getElementById('monthlyExpenses').value);
+            const rehabCost = parseFloat(document.getElementById('rehabCost').value);
+
+            if (isNaN(purchasePrice) || isNaN(monthlyRentalIncome) || isNaN(monthlyExpenses) || isNaN(rehabCost) ||
+                purchasePrice <= 0 || monthlyRentalIncome <= 0 || monthlyExpenses < 0 || rehabCost < 0) {
+                alert('Please enter valid inputs.');
+                return;
+            }
+
+            // Monthly cash flow
+            const monthlyCashFlow = monthlyRentalIncome - monthlyExpenses;
+
+            // ROI formula
+            const totalInvestment = purchasePrice + rehabCost;
+            const annualCashFlow = monthlyCashFlow * 12;
+            const roi = (annualCashFlow / totalInvestment) * 100;
+
+            // Cap rate formula
+            const capRate = (annualCashFlow / purchasePrice) * 100;
+
+            // Break-even analysis
+            const breakEvenYears = totalInvestment / annualCashFlow;
+
+            // Display results
+            document.getElementById('cashFlow').innerText = `Monthly Cash Flow: $${monthlyCashFlow.toFixed(2)}`;
+            document.getElementById('roi').innerText = `ROI: ${roi.toFixed(2)}%`;
+            document.getElementById('capRate').innerText = `Cap Rate: ${capRate.toFixed(2)}%`;
+            document.getElementById('breakEven').innerText = `Break-even Time: ${breakEvenYears.toFixed(2)} years`;
+        }
+    </script>
+</body>
+</html>
